@@ -44,8 +44,7 @@
   tasks:
     - name: Set names for sequential data set and pds for use by this sample
       set_fact:
-        pds_name: "ANSIBLE.DEMO.PDSE"
-        seq_name: "{{ seq_name }}"
+        pds_name: "ANSIBLE.DEMO.PDSE"zos_concepts/data_sets/data_set_basics/data_set_basics_pause
 
     - name: Create a PDS
       zos_data_set:
@@ -91,7 +90,7 @@
       pause:
         seconds: 10
 
-    - name: Copy inline content to a sequential dataset "{{ seq_name }}"
+    - name: Copy inline content to a sequential dataset SAMPLE.SEQ.DATA.SET
       zos_copy:
         content: |
             //ANSIBLE.DEMO.SUBMIT.SEQ    JOB (T043JM,JM00,1,0,0,0),'ANSIBLE.DEMO.SUBMIT.SEQ WORLD - JRM',
@@ -104,12 +103,12 @@
             /*
             //SYSUT2   DD SYSOUT=*
             //
-        dest: "{{ seq_name }}"
+        dest: SAMPLE.SEQ.DATA.SET
         volume: DIMATO
         force: True
       register: result
 
-    - name: Response copy to a sequential dataset "{{ seq_name }}"
+    - name: Response copy to a sequential dataset SAMPLE.SEQ.DATA.SET
       debug:
         var: result
 
@@ -117,23 +116,23 @@
       pause:
         seconds: 10
 
-    - name: Uncatalog a data set "{{ seq_name }}" if it is cataloged.
+    - name: Uncatalog a data set SAMPLE.SEQ.DATA.SET if it is cataloged.
       zos_data_set:
-        name: "{{ seq_name }}"
+        name: SAMPLE.SEQ.DATA.SET
         state: uncataloged
       register: result
 
-    - name: Response uncataloged "{{ seq_name }}"
+    - name: Response uncataloged SAMPLE.SEQ.DATA.SET
       debug:
         var: result
 
-    - name: Submit uncataloged data set "{{ seq_name }}"
+    - name: Submit uncataloged data set SAMPLE.SEQ.DATA.SET
       zos_job_submit:
         src: ANSIBLE.DEMO.SUBMIT.SEQ
         location: DATA_SET
         volume: DIMATO
       register: result
-    - name: Response for submit "{{ seq_name }}"
+    - name: Response for submit SAMPLE.SEQ.DATA.SET
       debug:
         var: result
 
