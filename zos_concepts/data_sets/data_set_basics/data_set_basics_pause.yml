@@ -60,7 +60,7 @@
       debug:
         msg: "{{ result }}"
 
-    - name: Copy the sequential data set to PDS member
+    - name: Copy the local JCL to PDS member
       zos_copy:
         src: "{{ playbook_dir }}/files/HELLO.jcl"
         dest: "{{ pds_name }}(HELLO)"
@@ -108,7 +108,7 @@
         force: True
       register: result
 
-    - name: Response copy to a sequential dataset ANSIBLE.SEQ.DATA.SET
+    - name: Response copy content into ANSIBLE.SEQ.DATA.SET
       debug:
         var: result
 
