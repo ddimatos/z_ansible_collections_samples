@@ -71,9 +71,9 @@
       debug:
         msg: "{{ result }}"
 
-    # - name: Pause 30 seconds and review data set(s)
-    #   pause:
-    #     seconds: 30
+    - name: Pause 30 seconds and review data set(s)
+      pause:
+        seconds: 10
 
     - name: Delete the data sets
       zos_data_set:
@@ -86,9 +86,9 @@
       debug:
         msg: "{{ result }}"
 
-    # - name: Pause 10 seconds and review data set(s) are deleted
-    #   pause:
-    #     seconds: 10
+    - name: Pause 10 seconds and review data set(s) are deleted
+      pause:
+        seconds: 10
 
     - name: Copy inline content to a sequential dataset ANSIBLE.SEQ.DATA.SET
       zos_copy:
@@ -112,9 +112,9 @@
       debug:
         var: result
 
-    # - name: Pause 10 seconds and review data set(s) JCL content
-    #   pause:
-    #     seconds: 10
+    - name: Pause 10 seconds and review data set(s) JCL content
+      pause:
+        seconds: 10
 
     - name: Uncatalog a data set ANSIBLE.DEMO.SUBMIT.SEQ if it is cataloged.
       zos_data_set:
