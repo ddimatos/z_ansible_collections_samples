@@ -71,9 +71,9 @@
       debug:
         msg: "{{ result }}"
 
-    - name: Pause 30 seconds and review data set(s)
-      pause:
-        seconds: 30
+    # - name: Pause 30 seconds and review data set(s)
+    #   pause:
+    #     seconds: 30
 
     - name: Delete the data sets
       zos_data_set:
@@ -86,11 +86,11 @@
       debug:
         msg: "{{ result }}"
 
-    - name: Pause 10 seconds and review data set(s) are deleted
-      pause:
-        seconds: 10
+    # - name: Pause 10 seconds and review data set(s) are deleted
+    #   pause:
+    #     seconds: 10
 
-    - name: Copy inline content to a sequential dataset SAMPLE.SEQ.DATA.SET
+    - name: Copy inline content to a sequential dataset ANSIBLE.SEQ.DATA.SET
       zos_copy:
         content: |
             //HELLO    JOB (T043JM,JM00,1,0,0,0),'HELLO WORLD - JRM',
@@ -103,36 +103,36 @@
             /*
             //SYSUT2   DD SYSOUT=*
             //
-        dest: SAMPLE.SEQ.DATA.SET
+        dest: ANSIBLE.DEMO.SUBMIT.SEQ
         volume: DIMATO
         force: True
       register: result
 
-    - name: Response copy to a sequential dataset SAMPLE.SEQ.DATA.SET
+    - name: Response copy to a sequential dataset ANSIBLE.SEQ.DATA.SET
       debug:
         var: result
 
-    - name: Pause 10 seconds and review data set(s) JCL content
-      pause:
-        seconds: 10
+    # - name: Pause 10 seconds and review data set(s) JCL content
+    #   pause:
+    #     seconds: 10
 
-    - name: Uncatalog a data set SAMPLE.SEQ.DATA.SET if it is cataloged.
+    - name: Uncatalog a data set ANSIBLE.DEMO.SUBMIT.SEQ if it is cataloged.
       zos_data_set:
-        name: SAMPLE.SEQ.DATA.SET
+        name: ANSIBLE.DEMO.SUBMIT.SEQ
         state: uncataloged
       register: result
 
-    - name: Response uncataloged SAMPLE.SEQ.DATA.SET
+    - name: Response uncataloged ANSIBLE.DEMO.SUBMIT.SEQ
       debug:
         var: result
 
-    - name: Submit uncataloged data set SAMPLE.SEQ.DATA.SET
+    - name: Submit uncataloged data set ANSIBLE.DEMO.SUBMIT.SEQ
       zos_job_submit:
         src: ANSIBLE.DEMO.SUBMIT.SEQ
         location: DATA_SET
         volume: DIMATO
       register: result
-    - name: Response for submit SAMPLE.SEQ.DATA.SET
+    - name: Response for submit ANSIBLE.DEMO.SUBMIT.SEQ
       debug:
         var: result
 
