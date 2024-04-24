@@ -44,7 +44,7 @@
   tasks:
     - name: Set names for sequential data set and pds for use by this sample
       set_fact:
-        pds_name: "ANSIBLE.DEMO.PDSE"zos_concepts/data_sets/data_set_basics/data_set_basics_pause
+        pds_name: "ANSIBLE.DEMO.PDSE"
 
     - name: Create a PDS
       zos_data_set:
