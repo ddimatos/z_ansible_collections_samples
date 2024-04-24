@@ -1,0 +1,89 @@
+###############################################################################
+# © Copyright IBM Corporation 2020, 2021
+###############################################################################
+# This sample playbook demonstrates basic data set operations using modules
+# included in the Red Hat Ansible Certified  Content for IBM Z core collection.
+#
+# Usage:
+#  ansible-playbook -i <inventory> <playbook>
+#
+# Example:
+#  ansible-playbook -i inventories data_set_basics.yml
+#  ansible-playbook -i inventories data_set_basics.yml -v
+#
+#  Additional facts for this playbook can be configured to override the defaults
+#  by reviewing the "Fact setting" section of this playbook, for example,
+#  `data_set_name` and `system_name`.
+#
+# Requirements:
+#   IBM z/OS core collection 1.2.0 or later
+#
+# Configure:
+#   tgt_tmp_dir - this is the USS directory on the target which will be written
+#                 to for this example.
+#
+# Optional:
+#   data_set_name - this is the data set name that will be created during
+#                   execution of this sample.
+#   pds_name - this is the pds name that will be used during execution of this
+#              sample.
+#   system_name - this is the system name that will be used during this example,
+#                 determined by executing `uname -n` on the target.
+###############################################################################
+
+---
+
+- hosts: all
+  collections:
+    - ibm.ibm_zos_core
+  gather_facts: false
+  vars:
+    tgt_tmp_dir: "/tmp/demo"
+  environment: "{{ environment_vars }}"
+
+  tasks:
+    - name: Set names for sequential data set and pds for use by this sample
+      set_fact:
+        data_set_name: "ANSIBLE.DEMO.DATASET"
+        pds_name: "ANSIBLE.DEMO.PDSE"
+
+    - name: Create a PDS
+      zos_data_set:
+        name: "{{ pds_name }}"
+        type: pds
+        size: 5M
+        format: fba
+        record_length: 100
+        replace: yes
+      register: result
+
+    - name: Response for creating the PDS
+      debug:
+        msg: "{{ result }}"
+
+    - name: Copy the sequential data set to PDS member
+      zos_copy:
+        src: "{{ playbook_dir }}/files/HELLO.jcl"
+        dest: "{{ pds_name }}(HELLO)"
+        remote_src: false
+      register: result
+
+    - name: Response for copying JCL to {{ pds_name }}(HELLO)
+      debug:
+        msg: "{{ result }}"
+
+    - name: Make sure service has time to start or stop
+      pause:
+        seconds: 30
+
+    - name: Delete the data sets
+      zos_data_set:
+        batch:
+          - name: "{{ pds_name }}"
+            state: absent
+      register: result
+
+    - name: Response for deleting the data sets
+      debug:
+        msg: "{{ result }}"
+
