@@ -62,12 +62,12 @@
 
     - name: Copy the sequential data set to PDS member
       zos_copy:
-        src: "{{ playbook_dir }}/files/ANSIBLE.DEMO.SUBMIT.SEQ.jcl"
-        dest: "{{ pds_name }}(ANSIBLE.DEMO.SUBMIT.SEQ)"
+        src: "{{ playbook_dir }}/files/HELLO.jcl"
+        dest: "{{ pds_name }}(HELLO)"
         remote_src: false
       register: result
 
-    - name: Response for copying JCL to {{ pds_name }}(ANSIBLE.DEMO.SUBMIT.SEQ)
+    - name: Response for copying JCL to {{ pds_name }}(HELLO)
       debug:
         msg: "{{ result }}"
 
@@ -93,13 +93,13 @@
     - name: Copy inline content to a sequential dataset SAMPLE.SEQ.DATA.SET
       zos_copy:
         content: |
-            //ANSIBLE.DEMO.SUBMIT.SEQ    JOB (T043JM,JM00,1,0,0,0),'ANSIBLE.DEMO.SUBMIT.SEQ WORLD - JRM',
+            //HELLO    JOB (T043JM,JM00,1,0,0,0),'HELLO WORLD - JRM',
             //             MSGCLASS=X,MSGLEVEL=1,NOTIFY=&SYSUID
             //STEP0001 EXEC PGM=IEBGENER
             //SYSIN    DD DUMMY
             //SYSPRINT DD SYSOUT=*
             //SYSUT1   DD *
-            ANSIBLE.DEMO.SUBMIT.SEQ, WORLD
+            HELLO, WORLD
             /*
             //SYSUT2   DD SYSOUT=*
             //
