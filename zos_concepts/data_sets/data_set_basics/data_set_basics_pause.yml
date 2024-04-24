@@ -44,8 +44,8 @@
   tasks:
     - name: Set names for sequential data set and pds for use by this sample
       set_fact:
-        data_set_name: "ANSIBLE.DEMO.DATASET"
         pds_name: "ANSIBLE.DEMO.PDSE"
+        seq_name: "{{ seq_name }}"
 
     - name: Create a PDS
       zos_data_set:
@@ -63,16 +63,16 @@
 
     - name: Copy the sequential data set to PDS member
       zos_copy:
-        src: "{{ playbook_dir }}/files/HELLO.jcl"
-        dest: "{{ pds_name }}(HELLO)"
+        src: "{{ playbook_dir }}/files/ANSIBLE.DEMO.SUBMIT.SEQ.jcl"
+        dest: "{{ pds_name }}(ANSIBLE.DEMO.SUBMIT.SEQ)"
         remote_src: false
       register: result
 
-    - name: Response for copying JCL to {{ pds_name }}(HELLO)
+    - name: Response for copying JCL to {{ pds_name }}(ANSIBLE.DEMO.SUBMIT.SEQ)
       debug:
         msg: "{{ result }}"
 
-    - name: Make sure service has time to start or stop
+    - name: Pause 30 seconds and review data set(s)
       pause:
         seconds: 30
 
@@ -86,4 +86,54 @@
     - name: Response for deleting the data sets
       debug:
         msg: "{{ result }}"
+
+    - name: Pause 10 seconds and review data set(s) are deleted
+      pause:
+        seconds: 10
+
+    - name: Copy inline content to a sequential dataset "{{ seq_name }}"
+      zos_copy:
+        content: |
+            //ANSIBLE.DEMO.SUBMIT.SEQ    JOB (T043JM,JM00,1,0,0,0),'ANSIBLE.DEMO.SUBMIT.SEQ WORLD - JRM',
+            //             MSGCLASS=X,MSGLEVEL=1,NOTIFY=&SYSUID
+            //STEP0001 EXEC PGM=IEBGENER
+            //SYSIN    DD DUMMY
+            //SYSPRINT DD SYSOUT=*
+            //SYSUT1   DD *
+            ANSIBLE.DEMO.SUBMIT.SEQ, WORLD
+            /*
+            //SYSUT2   DD SYSOUT=*
+            //
+        dest: "{{ seq_name }}"
+        volume: DIMATO
+        force: True
+      register: result
+
+    - name: Response copy to a sequential dataset "{{ seq_name }}"
+      debug:
+        var: result
+
+    - name: Pause 10 seconds and review data set(s) JCL content
+      pause:
+        seconds: 10
+
+    - name: Uncatalog a data set "{{ seq_name }}" if it is cataloged.
+      zos_data_set:
+        name: "{{ seq_name }}"
+        state: uncataloged
+      register: result
+
+    - name: Response uncataloged "{{ seq_name }}"
+      debug:
+        var: result
+
+    - name: Submit uncataloged data set "{{ seq_name }}"
+      zos_job_submit:
+        src: ANSIBLE.DEMO.SUBMIT.SEQ
+        location: DATA_SET
+        volume: DIMATO
+      register: result
+    - name: Response for submit "{{ seq_name }}"
+      debug:
+        var: result
 
