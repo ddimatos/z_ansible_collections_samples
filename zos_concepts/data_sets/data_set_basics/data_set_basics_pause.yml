@@ -104,7 +104,7 @@
             //SYSUT2   DD SYSOUT=*
             //
         dest: ANSIBLE.DEMO.SUBMIT.SEQ
-        volume: DIMATO
+        # volume: DIMATO
         force: True
       register: result
 
