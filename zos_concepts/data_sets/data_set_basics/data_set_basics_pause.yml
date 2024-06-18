@@ -116,17 +116,17 @@
       pause:
         seconds: 10
 
-    - name: Uncatalog a data set ANSIBLE.DEMO.SUBMIT.SEQDS if it is cataloged.
-      zos_data_set:
-        name: ANSIBLE.DEMO.SUBMIT.SEQDS
-        state: uncataloged
-      register: result
+    # - name: Uncatalog a data set ANSIBLE.DEMO.SUBMIT.SEQDS if it is cataloged.
+    #   zos_data_set:
+    #     name: ANSIBLE.DEMO.SUBMIT.SEQDS
+    #     state: uncataloged
+    #   register: result
 
-    - name: Response uncataloged ANSIBLE.DEMO.SUBMIT.SEQDS
-      debug:
-        var: result
+    # - name: Response uncataloged ANSIBLE.DEMO.SUBMIT.SEQDS
+    #   debug:
+    #     var: result
 
-    - name: Submit uncataloged data set ANSIBLE.DEMO.SUBMIT.SEQDS
+    - name: Submit data set ANSIBLE.DEMO.SUBMIT.SEQDS
       zos_job_submit:
         src: ANSIBLE.DEMO.SUBMIT.SEQDS
         location: DATA_SET
