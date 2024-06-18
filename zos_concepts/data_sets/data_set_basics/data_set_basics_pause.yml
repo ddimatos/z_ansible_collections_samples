@@ -103,7 +103,7 @@
             /*
             //SYSUT2   DD SYSOUT=*
             //
-        dest: ANSIBLE.DEMO.SUBMIT.SEQ
+        dest: ANSIBLE.DEMO.SUBMIT.SEQDS
         # volume: DIMATO
         force: True
       register: result
@@ -116,23 +116,23 @@
       pause:
         seconds: 10
 
-    - name: Uncatalog a data set ANSIBLE.DEMO.SUBMIT.SEQ if it is cataloged.
+    - name: Uncatalog a data set ANSIBLE.DEMO.SUBMIT.SEQDS if it is cataloged.
       zos_data_set:
-        name: ANSIBLE.DEMO.SUBMIT.SEQ
+        name: ANSIBLE.DEMO.SUBMIT.SEQDS
         state: uncataloged
       register: result
 
-    - name: Response uncataloged ANSIBLE.DEMO.SUBMIT.SEQ
+    - name: Response uncataloged ANSIBLE.DEMO.SUBMIT.SEQDS
       debug:
         var: result
 
-    - name: Submit uncataloged data set ANSIBLE.DEMO.SUBMIT.SEQ
+    - name: Submit uncataloged data set ANSIBLE.DEMO.SUBMIT.SEQDS
       zos_job_submit:
-        src: ANSIBLE.DEMO.SUBMIT.SEQ
+        src: ANSIBLE.DEMO.SUBMIT.SEQDS
         location: DATA_SET
         volume: DIMATO
       register: result
-    - name: Response for submit ANSIBLE.DEMO.SUBMIT.SEQ
+    - name: Response for submit ANSIBLE.DEMO.SUBMIT.SEQDS
       debug:
         var: result
 
