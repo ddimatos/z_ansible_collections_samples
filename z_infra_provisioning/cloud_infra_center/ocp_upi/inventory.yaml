@@ -59,6 +59,8 @@ all:
       os_storage_nodes_number: 0
       os_infra_nodes_number: 0
 
+      # add_secgroups
+      # add_bootstrap_secgroups
       # os_bootstrap_ip: '<bootstrap ip addr>'
       # os_master_ip: ['<master0 ip addr>', '<master1 ip addr>', '<master2 ip addr>']
       # os_worker_ip: ['<worker0 ip addr>', '<worker1 ip addr>', '<worker2 ip addr>']

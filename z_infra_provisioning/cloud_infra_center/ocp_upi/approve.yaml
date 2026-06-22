@@ -21,7 +21,7 @@
             echo $(./oc get nodes |grep 'worker-'|wc -l)
           register: csr_worker
           until: csr_worker.stdout | int == {{ os_compute_nodes_number }}
-          retries: 30
+          retries: 60
           delay: 10
       rescue:
         - name: Approve CSR failed
