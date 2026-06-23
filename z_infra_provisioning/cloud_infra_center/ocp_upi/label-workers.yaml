@@ -17,7 +17,7 @@
       environment:
         KUBECONFIG: "./auth/kubeconfig"
       ansible.builtin.shell: |
-        ./kubectl label node {{workerid}} node-role.kubernetes.io/{{worker_type | default('worker')}}=true --kubeconfig auth/kubeconfig &> /dev/null
+        ./kubectl label node {{workerid}} node-role.kubernetes.io/{{worker_type | default('worker')}}='' --kubeconfig auth/kubeconfig &> /dev/null
         echo $(./oc get nodes -o custom-columns=NAME:.metadata.name)
       register: result
       until: result.stdout.find(workerid) != -1
@@ -26,7 +26,7 @@
   rescue:
     - name: Update {{worker_type | default('worker')}} node label manually
       ansible.builtin.debug:
-        msg: "Please update {{worker_type | default('worker')}} node label manually via: ./kubectl label node {{workerid}} node-role.kubernetes.io/{{worker_type | default('worker')}}=true --kubeconfig auth/kubeconfig"
+        msg: "Please update {{worker_type | default('worker')}} node label manually via: ./kubectl label node {{workerid}} node-role.kubernetes.io/{{worker_type | default('worker')}}='' --kubeconfig auth/kubeconfig"
 
 - name: Update the {{worker_type | default('worker')}} node taint to NoSchedule
   block:

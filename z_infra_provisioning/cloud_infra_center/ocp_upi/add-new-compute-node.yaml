@@ -94,7 +94,7 @@
         name: "{{ os_port_worker }}-{{ item.split(' ')[0] }}"
         network: "{{ use_network_name }}"
         security_groups:
-          - "{{ os_sg_worker }}"
+          - "{{ os_sg_worker + ',' + add_secgroups if add_secgroups is defined else os_sg_worker }}"
         fixed_ips:
           - subnet: "{{ use_network_subnet }}"
             ip_address: "{{ item.split(' ')[1] }}"
@@ -107,7 +107,7 @@
         name: "{{ os_port_worker }}-{{ item.split(' ')[0] }}"
         network: "{{ use_network_name }}"
         security_groups:
-          - "{{ os_sg_worker }}"
+          - "{{ os_sg_worker + ',' + add_secgroups if add_secgroups is defined else os_sg_worker }}"
       register: ports
       with_items: "{{ new_worker_list.stdout_lines }}"
       when: add_worker_ip == "random"

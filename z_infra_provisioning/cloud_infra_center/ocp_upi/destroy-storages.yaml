@@ -35,7 +35,6 @@
 
 - hosts: localhost
   gather_facts: false
-
   tasks:
     - name: 'Import common yaml'
       ansible.builtin.include_tasks: "{{ playbook_dir }}/common.yaml"
@@ -45,19 +44,20 @@
         cmd: "jq -r .infraID metadata.json"
       register: infra_id
 
-    - name: 'Remove the storage servers'
-      openstack.cloud.server:
-        name: "{{ item.1 }}-{{ item.0 }}"
-        state: absent
-      with_indexed_items: "{{ [os_storage_server_name] * os_storage_nodes_number }}"
-
-    - name: 'Get storage servers from ICIC command line'
+    - name: 'Get storage nodes from ICIC command line'
       ansible.builtin.shell: |
-        openstack server list -c Name -f value | awk '/{{ infra_id.stdout_lines[0] }}/ && /storage/'
-      register: storage
+        openstack server list -c Name -f value | awk '/{{ os_storage_server_name }}/'
+      register: computes
       ignore_errors: true
 
-    - name: 'Remove all storage node'
+    - name: 'Remove all storage nodes'
       ansible.builtin.shell:
         cmd: "openstack server delete {{ item.1 }}"
-      with_indexed_items: "{{ storage.stdout_lines }}"
+      with_indexed_items: "{{ computes.stdout_lines }}"
+      when: compute_index is not defined
+
+    - name: 'Remove specific storage nodes'
+      ansible.builtin.shell:
+        cmd: "openstack server delete {{ os_storage_server_name }}-{{ item }}"
+      loop: "{{compute_index}}"
+      when: compute_index is defined
