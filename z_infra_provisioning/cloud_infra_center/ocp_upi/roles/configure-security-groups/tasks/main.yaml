@@ -44,6 +44,23 @@
   ansible.builtin.command:
     cmd: "openstack security group set --tag {{ cluster_id_tag }} {{ os_sg_worker }} "
 
+
+- name: 'Create the storage security group'
+  openstack.cloud.security_group:
+    name: "{{ os_sg_storage }}"
+
+- name: 'Set storage security group tag'
+  ansible.builtin.command:
+    cmd: "openstack security group set --tag {{ cluster_id_tag }} {{ os_sg_storage }} "
+
+- name: 'Create the infra security group'
+  openstack.cloud.security_group:
+    name: "{{ os_sg_infra }}"
+
+- name: 'Set infra security group tag'
+  ansible.builtin.command:
+    cmd: "openstack security group set --tag {{ cluster_id_tag }} {{ os_sg_infra }} "
+
 - name: 'Create master-sg rule "ICMP"'
   openstack.cloud.security_group_rule:
     security_group: "{{ os_sg_master }}"

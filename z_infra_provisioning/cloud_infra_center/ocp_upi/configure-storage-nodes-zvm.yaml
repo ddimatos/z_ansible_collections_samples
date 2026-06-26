@@ -9,7 +9,7 @@
 
 ---
 
-- name: Create the compute nodes in zmv
+- name: Create the storage nodes in zvm
   hosts: localhost
   roles:
-    - configure-compute-nodes-zvm
+    - configure-storage-nodes-zvm

@@ -9,7 +9,7 @@
 
 ---
 
-- name: Create the compute nodes in zmv
+- name: Create the infra nodes in kvm
   hosts: localhost
   roles:
-    - configure-compute-nodes-zvm
+    - configure-infra-nodes-kvm
