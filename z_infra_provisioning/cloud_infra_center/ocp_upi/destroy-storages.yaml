@@ -44,21 +44,20 @@
         cmd: "jq -r .infraID metadata.json"
       register: infra_id
 
-    - name: 'Get compute servers from ICIC command line'
+    - name: 'Get storage nodes from ICIC command line'
       ansible.builtin.shell: |
-        openstack server list -c Name -f value | awk '/{{ os_compute_server_name }}/'
+        openstack server list -c Name -f value | awk '/{{ os_storage_server_name }}/'
       register: computes
       ignore_errors: true
 
-    - name: 'Remove all computes node'
+    - name: 'Remove all storage nodes'
       ansible.builtin.shell:
         cmd: "openstack server delete {{ item.1 }}"
       with_indexed_items: "{{ computes.stdout_lines }}"
       when: compute_index is not defined
 
-    - name: 'Remove specific computes node'
+    - name: 'Remove specific storage nodes'
       ansible.builtin.shell:
-        cmd: "openstack server delete {{ os_compute_server_name }}-{{ item }}"
+        cmd: "openstack server delete {{ os_storage_server_name }}-{{ item }}"
       loop: "{{compute_index}}"
       when: compute_index is defined
-      
