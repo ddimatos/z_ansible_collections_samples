@@ -15,7 +15,6 @@
       ansible.builtin.include_role:
         name: daj_util
       vars:
-      vars:
         daj_util_ssid: DSN1
         daj_util_sysname: SYS1
         daj_util_utilityname: COPY
