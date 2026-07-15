@@ -1,0 +1,50 @@
+# *+------------------------------------------------------------------------+
+# *| © Copyright IBM Corp. 2026                                             |
+# *| [10.17.2025]                                                           |
+# *|   - Tested with ACC 1.2.6                                              |
+# *|   - Initial release                                                    |
+# *| [12.12.2025]                                                           |
+# *|   - Tested with ACC 1.2.10                                             |
+# *| [02.13.2026]                                                           |
+# *|   - Tested with ACC 1.2.12                                             |
+# *| [04.02.2026]                                                           |
+# *|   - Tested with ACC 1.2.13                                             |
+# *|   - Renamed the output file name                                       |
+# *| [06.26.2026]                                                           |
+# *|   - Tested with ACC 1.2.14                                             |
+# *|   - Added execution timestamp and ACC about info display               |
+# *|   - Refactored to include reusable tasks in 17_tasks_pull_ssc_logs.yaml|
+# *+------------------------------------------------------------------------+
+
+- name: ACC playbook, to get logs from appliances
+  hosts: localhost
+  gather_facts: true
+  vars_prompt:
+    - name: "ssc_ip"
+      prompt: "Enter your SSC LPAR's IP"
+      private: false
+    - name: "lpar_username"
+      prompt: "Enter your SSC LPAR's username"
+      private: false
+    - name: "lpar_password"
+      prompt: "Enter your SSC LPAR's password"
+      private: true
+    - name: "reason"
+      prompt: "Enter reason to create logs"
+      private: false
+
+  vars:
+    log_destination: "/tmp/ssc_{{ '%Y-%m-%d_%H:%M:%S' | strftime }}.gz"
+
+  tasks:
+    - name: Display playbook execution information
+      ansible.builtin.include_tasks:
+        file: common_display_execution_info.yaml
+
+    - name: Include SSC log pulling tasks
+      ansible.builtin.include_tasks:
+        file: 17_tasks_pull_ssc_logs.yaml
+
+    - name: Display log download location
+      ansible.builtin.debug:
+        msg: "SSC logs downloaded successfully at location: {{ log_destination }}"
